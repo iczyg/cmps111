@@ -1,0 +1,12 @@
+increments.c
+
+increments.c is a test script that runs x number of forks that do an incremention process from an initial value y to (y + 100) with an incrementation of 0.000001.
+The initial value is an irrelavent value that is equal to it's fork ID number multiplied by 2.
+The x variable is determined by the parameters given when the program is run. 
+The program either accepts either none or one double parameter. 
+If the program is given a parameter, x is equal to that parameter. 
+If there are no parameters given, then x is equal to one. 
+Each fork records how long it took to compelete its incrementation operation. 
+Once each fork is created, then the time for when the fork was created is recorded. 
+After the process of the fork is finished, then the fork will print its ID and finished run time. 
+The run time is calculated by finding the difference between its end time and the time that the fork was created.

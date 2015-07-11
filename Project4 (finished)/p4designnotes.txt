@@ -1,0 +1,38 @@
+usr/include/minix
+/callnr.h: maps the syscalls, call number 69 for METAREAD and 70 for METAWRITE
+/vfsif.h: VFS/FS message requests, REQ_METAREAD (VFS_BASE + 33) REQ_METAWRITE (VFS_BASE + 34)
+
+usr/src/include
+/stdio.h: i/o definitions, added prototypes for metaread and metawrite
+/minix/callnr.h: syscall handling like the include files above, same 69 and 70 slots
+/minix/vfsif.h: same thing with the VFS/FS requests
+
+usr/src/lib
+/libc/posix/_metaread.c: metaread library function
+/libc/posix/_metawrite.c: metawrite library function
+/libc/posix/Makefile.inc: edited makefile to include the new functions
+/libvtreefs/table.c: added two new slots for metaread and metawrite
+
+
+usr/src/servers/vfs
+/proto.h: added prototypes do_read_m and read_write_m under read.c, and do_write_m under write.c
+/table.c: edited slots 69 and 70 for do_read_m and do_write_m syscalls
+/read.c: do_read_m: functions the same as do_read, calls read_write_m with a READING rw_flag. 
+         read_write_m: Has the same basic functionality as read_write, which in VFS just makes a MFS request, 
+                       does not deal with special files or positions
+/write.c: do_write_m functions similar to do_write, calls read_write_m(in read c) and passes a WRITING rw_flag
+/request.c: req_read_write_m functions similar to req_read_write, sending a request message to MFS with either 
+            METAREAD or METAWRITE
+
+
+usr/src/servers/mfs
+/proto.h: added the prototypes for fs_metaread and fs_metawrite under read.c
+/table.c: added two new slots for fs_metaread and fs_metawrite
+/read.c: fs_metaread: handles the VFS request message for reading, based off of fs_readwrite
+         fs_metawrite: the same as fs_metaread aside from the rw_flag, only seperate functions so metacat and metatag can call them
+         rw_meta: handles the allocating of inode zone 9 for metadata, and reading from and writing to that metadata based off
+                  the rw_flag given. Works the same as rw_chunk, but has to be its own function since rw_chunk deals with the files
+                  directly and not with the metadata outside the regular file content
+
+usr/src/servers/hgfs
+/table.c: added two new slots for fs_metaread and fs_metawrite

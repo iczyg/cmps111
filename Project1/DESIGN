@@ -1,0 +1,78 @@
+Jason Choi, jawchoi@ucsc.edu
+Jason Alvarez, jcalvare@ucsc.edu
+Dennis Tran, dehutran@ucsc.edu
+Jordan McCall, jmccall@ucsc.edu
+
+Purpose: Get up to speed on system programming and to
+gain some familiarity with the system call interface by
+creating a shell.
+
+Data:
+1. args - An array of strings that holds the arguments of 
+          of a command.
+   - represented as a pointer to a char pointer (char **)
+   - args[0] is the name of the program to execute, and the rest
+     are the arguments for the program.
+
+2. _argcount - The number of arguments of the current command.
+   - This variable is used to easily test if the last argument is
+     the "&" character.
+
+3. pid - A variable to hold the process id of a process.
+
+4. file_input_index - An integer value that holds the index in the
+                      args array of the file redirection symbol "<"
+                      if it was given as an argument.
+
+5. file_output_index - An integer value that holds the index in the
+                       args array of the file redirection symbol ">"
+                       if it was given as an argument.
+
+6. pipe_index - An integer value that holds the index in the args
+                array of the pipe symbol "|" if it was given as an
+                argument.
+
+7. background - An integer value that is 1 if the last argument is
+                "&", and 0 if not.
+
+Operations:
+1. cd (args)
+   - Description: A function that changes the current directory
+                  to the directory specified in args.
+   - Input: args
+   - Output: nothing
+   - Result: the current directory is changed
+
+2. file_output (args, index)
+   - Description: A function that redirects stdout to a file that
+                  is specified in args. Index is the position of
+                  the filename in the args array.
+   - Input: args, index
+   - Output: nothing
+   - Result: Stdout is redirected to a file
+
+3. file_input (args, index)
+   - Description: A function that redirects a file specified in
+                  args, to stdin. Index is the position of the
+                  filename in the args array.
+   - Input: args, index
+   - Output: nothing
+   - Result: A file is redirected to stdin
+
+4. pipeline (args, pipe_index)
+   - Description: A function that pipes one command to another.
+   - Input: args, pipe_index
+   - Output: The output of the piped command.
+   - Result: The first command is piped to the second command,
+             and is then output to the console.
+
+Main: 1. Loop through the args array to determine whether one of
+         the functions above need to be called.
+      2. If any of ">", "<", "|", "cd", or "&" are in the
+         arguments list, call the appropriate function.
+      3. After any functions have been called, fork a process.
+         If it is a child process, execute the program that
+         was given in the command line. If it is a parent
+         process, wait for the child process to exit.
+      4. Repeat this in an infinite loop, until the "exit"
+         command is given, and exit the shell.

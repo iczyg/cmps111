@@ -1,0 +1,5 @@
+Checksum.c –
+
+	Main: reads in a file and copies its contents to a new file named “copyfile”. It then copies the file to a character array and saves the number of bytes read from the file. The function checksum is then called and the results are printed. 
+	
+	checkSum:  adds up the integer value of all of the characters in the file and returns the result. 
